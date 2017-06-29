@@ -1,0 +1,4 @@
+export(find.n)
+importFrom("graphics", "abline", "legend", "lines", "plot", "points","text")
+importFrom("stats", "rbinom", "rnorm", "runif")
+importFrom("utils", "read.table")

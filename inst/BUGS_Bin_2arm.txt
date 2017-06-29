@@ -1,0 +1,43 @@
+#-------------------------------------------------------------#
+#            Hierarchical Bayesian Design                     #
+#-------------------------------------------------------------#
+# WinBUGS Model for estimation                                #
+#  1. Binomial Endpoints                                      #
+#  2. Randomized, two arms                                    #
+#  3. Model set up:                                           #
+#   a. based on example 3.4 in book of Applied Bayesian       #
+#   Hierarchical methods                                      #
+#--------------------                                         #
+# Written by Qian Shi, Ph.D                                   #
+# Last updated on 04-28-2011                                  #
+#-------------------------------------------------------------#
+# Notes:                                                      #
+# 04-28-2011                                                  #
+# 1. added one more line for P(del > cut.del|data) to         #
+#    estimated two posterior prob with different cut.del      #
+# 2. changed del.grt.0 to del.grt                             #
+#-------------------------------------------------------------#
+
+## effect expressed as absolute difference
+## independent prior on p.c
+model
+{
+  for (i in 1:K){
+    x.t[i] ~ dbin(p.t[i], n.t[i])
+    x.c[i] ~ dbin(p.c[i], n.c[i])
+    del[i] ~ dnorm(mu.del, tau.del)
+    p.t[i] <- p.c[i]+min(max(del[i], -p.c[i]), (1-p.c[i]))
+  }
+  # prior on hyper-parameters
+  for (i in 1:K) {p.c[i] ~ dunif(0, 1)}
+  mu.del ~ dnorm(mu.del.mean.prior, mu.del.tau.prior)
+  tau.del ~ dgamma(tau.del.shape.prior, tau.del.rate.prior)
+
+  # transformation
+  for (i in 1:K){del.grt[i] <- step(del[i] - del.cut)}
+  mu.del.grt.0 <- step(mu.del - 0)
+  mu.del.grt <- step(mu.del - del.cut)
+  sigma.del <- 1/sqrt(tau.del)
+
+}
+
