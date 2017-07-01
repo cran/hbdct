@@ -8,7 +8,7 @@
 #   a. based on example 3.4 in book of Applied Bayesian       #
 #   Hierarchical methods                                      #
 #--------------------                                         #
-# Written by Qian Shi, Ph.D                                   #
+# Written by Jun Yin, Qian Shi, Ph.D                                   #
 # Last updated on 04-28-2011                                  #
 #-------------------------------------------------------------#
 # Notes:                                                      #
@@ -30,8 +30,8 @@ model
   }
   # prior on hyper-parameters
   for (i in 1:K) {p.c[i] ~ dunif(0, 1)}
-  mu.del ~ dnorm(mu.del.mean.prior, mu.del.tau.prior)
-  tau.del ~ dgamma(tau.del.shape.prior, tau.del.rate.prior)
+  mu.del ~ dnorm(0, 0.001)
+  tau.del ~ dgamma(1, 0.001)
 
   # transformation
   for (i in 1:K){del.grt[i] <- step(del[i] - del.cut)}

@@ -1,8 +1,6 @@
 power.fun <-
 function(n.pergrp, del.cut, k, T, p.c, effect.size,
-               #rep=500, pathcode=paste(installed.packages()['hbdct',2], "/hbdct",sep=""), codefile="BUGS_Bin_2arm.txt", pathout=getwd(), hyper) {
-			   rep=500, pathcode=getwd(), codefile="BUGS_Bin_2arm.txt", pathout=getwd(), hyper) {
-
+               rep=500, pathcode=path.package("hbdct"), codefile="BUGS_Bin_2arm.txt", pathout=getwd()) {
   n.c <- rep(n.pergrp, k)
   n.t <- n.c
 
@@ -20,13 +18,8 @@ function(n.pergrp, del.cut, k, T, p.c, effect.size,
 
   for (i in 1:rep) {
     bug.res <- brugs.bin.2arm(p.c=p.c, p.t=p.t5, n.c=n.c, n.t=n.t, 
-                              pathcode=pathcode, codefile=codefile, del.cut=del.cut, hyper=hyper)
-
-    if(!is.na(bug.res)){
-      cat(i, bug.res, '\n', file=filename, sep=' ', append=TRUE)
-    }else{
-      next;
-    }
+                         pathcode=pathcode, codefile=codefile, del.cut=del.cut)
+    cat(i, bug.res, '\n', file=filename, sep=' ', append=TRUE)
   }
 
   post.alt5 <- read.table(filename, header=TRUE, skip=2)

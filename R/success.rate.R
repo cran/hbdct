@@ -1,7 +1,6 @@
 success.rate <-
   function(n.pergrp, del.cut, k, T, p.c, effect.size, 
-           rep=500, pathcode, codefile="BUGS_Bin_2arm.txt", pathout, ...) {
-    hyper <- list(...)
+           rep=500, pathcode, codefile="BUGS_Bin_2arm.txt", pathout) {
     n.c <- rep(n.pergrp, k)
     n.t <- n.c
     
@@ -19,7 +18,7 @@ success.rate <-
     
     for (i in 1:rep) {
       bug.res <- brugs.bin.2arm(p.c=p.c, p.t=p.t5, n.c=n.c, n.t=n.t,
-                                pathcode=pathcode, codefile=codefile, del.cut=del.cut, hyper)
+                                pathcode=pathcode, codefile=codefile, del.cut=del.cut)
       cat(i, bug.res, '\n', file=filename, sep=' ', append=TRUE)
     }
     

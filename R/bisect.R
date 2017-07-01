@@ -4,8 +4,7 @@ function(na, nb, filename,
                    alpha.target=0.1, power.target=0.9, 
                    tol.b1=0.02, tol.b2=0.02, tol.a=0.05,
                    rep=500, 
-                   #pathcode=paste(installed.packages()['hbdct',2], "/hbdct",sep=""), codefile="BUGS_Bin_2arm.txt", pathout=getwd(), hyper) {
-				   pathcode=getwd(), codefile="BUGS_Bin_2arm.txt", pathout=getwd(), hyper) {
+                   pathcode=path.package("hbdct"), codefile="BUGS_Bin_2arm.txt", pathout=getwd()) {
  
   lower <- power.target - tol.b1;
   upper <- power.target + tol.b2;
@@ -13,8 +12,8 @@ function(na, nb, filename,
   n.list <- c(na, nb);
 
   n <- round((na + nb)/2)
-  power.ind <- power.fun(n, del.cut, k, T, p.c, effect.size, rep, pathcode, codefile, pathout, hyper)
-  alpha.fw <- alpha.fun(n, del.cut, k, T, p.c, effect.size, rep, pathcode, codefile, pathout, hyper)
+  power.ind <- power.fun(n, del.cut, k, T, p.c, effect.size, rep, pathcode, codefile, pathout)
+  alpha.fw <- alpha.fun(n, del.cut, k, T, p.c, effect.size, rep, pathcode, codefile, pathout)
   cat(n, alpha.fw, power.ind, '\n', file=filename, append=TRUE)
   n.list <- c(n.list, n)
  
@@ -34,15 +33,15 @@ function(na, nb, filename,
       stop()
     }else if (sum(n.new == n.list) > 0) {
       n <- n.new
-      power.ind <- power.fun(n.new, del.cut, k, T, p.c, effect.size, rep, pathcode, codefile, pathout, hyper)
-      alpha.fw <- alpha.fun(n.new, del.cut, k, T, p.c, effect.size, rep, pathcode, codefile, pathout, hyper)
+      power.ind <- power.fun(n.new, del.cut, k, T, p.c, effect.size, rep, pathcode, codefile, pathout)
+      alpha.fw <- alpha.fun(n.new, del.cut, k, T, p.c, effect.size, rep, pathcode, codefile, pathout)
       cat(n, alpha.fw, power.ind, '\n', file=filename, append=TRUE)
       print.op(flag=0, n, del.cut, k, T, alpha.fw, power.ind)
       stop()
     }else {
       n <- n.new
-      power.ind <- power.fun(n.new, del.cut, k, T, p.c, effect.size, rep, pathcode, codefile, pathout, hyper)
-      alpha.fw <- alpha.fun(n.new, del.cut, k, T, p.c, effect.size, rep, pathcode, codefile, pathout, hyper)
+      power.ind <- power.fun(n.new, del.cut, k, T, p.c, effect.size, rep, pathcode, codefile, pathout)
+      alpha.fw <- alpha.fun(n.new, del.cut, k, T, p.c, effect.size, rep, pathcode, codefile, pathout)
       cat(n, alpha.fw, power.ind, '\n', file=filename, append=TRUE) 
       n.list <- c(n.list, n.new)
     }

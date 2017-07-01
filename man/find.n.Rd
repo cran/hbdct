@@ -10,7 +10,7 @@ generates artificial data from binomial model, samples interested parameters fro
 \usage{
 find.n(del.cut, k, T, p.c, effect.size, alpha.target = 0.1, 
        power.target = 0.9, tol.b1 = 0.02, tol.b2 = 0.02, tol.a = 0.05, 
-	   n.min = 5, n.max = 70, nstep=10, rep = 500, pathcode = getwd(), 
+	   n.min = 5, n.max = 70, nstep=10, rep = 500, pathcode = path.package("hbdct"), 
 	   codefile = "BUGS_Bin_2arm.txt", pathout = getwd(), method = "linear")
 }
 %- maybe also 'usage' for other objects documented here.
@@ -91,16 +91,17 @@ find.n calls function bisect, power.fun, and alpha.fun.
 }
 
 \examples{
+## IMPORTANT: Please install package BRugs
 ## use Linear method
-find.n(del.cut=0.025, k=3, T=0.85, p.c=c(0.5, 0.4, 0.65), effect.size=0.2,
-        alpha.target=0.1, power.target=0.9, 
-        tol.b1=0.02, tol.b2=0.02, tol.a=0.05,
-        rep=500, pathcode=getwd(), codefile="BUGS_Bin_2arm.txt", pathout=getwd())
+#find.n(del.cut=0.025, k=3, T=0.85, p.c=c(0.5, 0.4, 0.65), effect.size=0.2,
+#        alpha.target=0.1, power.target=0.9, 
+#        tol.b1=0.02, tol.b2=0.02, tol.a=0.05,
+#        rep=500, pathcode=path.package("hbdct"), codefile="BUGS_Bin_2arm.txt", pathout=getwd())
 
 ## use Bisect method
-find.n(del.cut=0.025, k=3, T=0.85, p.c=c(0.5, 0.4, 0.65), effect.size=0.2,
-        alpha.target=0.1, power.target=0.9, 
-        tol.b1=0.02, tol.b2=0.02, tol.a=0.05,
-        rep=500, pathcode=getwd(), codefile="BUGS_Bin_2arm.txt", pathout=getwd(),
-        method="bisect")
+#find.n(del.cut=0.025, k=3, T=0.85, p.c=c(0.5, 0.4, 0.65), effect.size=0.2,
+#        alpha.target=0.1, power.target=0.9, 
+#        tol.b1=0.02, tol.b2=0.02, tol.a=0.05,
+#        rep=500, pathcode=path.package("hbdct"), codefile="BUGS_Bin_2arm.txt", pathout=getwd(),
+#        method="bisect")
 }

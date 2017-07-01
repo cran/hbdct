@@ -3,12 +3,10 @@ function(del.cut, k, T, p.c, effect.size,
                    alpha.target=0.1, power.target=0.9, 
                    tol.b1=0.02, tol.b2=0.02, tol.a=0.05, 
                    n.min=5, n.max=70, nstep=10, rep=500, 
-                   #pathcode=paste(installed.packages()['hbdct',2], "/hbdct",sep=""), codefile="BUGS_Bin_2arm.txt", pathout=getwd(), 
-				   pathcode=getwd(), codefile="BUGS_Bin_2arm.txt", pathout=getwd(), 
+                   pathcode=path.package("hbdct"), codefile="BUGS_Bin_2arm.txt", pathout=getwd(), 
                    method="linear") {
    
-  #hyper <- list(...)
-  hyper <- NULL;
+
   if (n.min >= n.max)
     stop("n.min is larger or equal to n.max!")
 
@@ -22,22 +20,23 @@ function(del.cut, k, T, p.c, effect.size,
 
   myseed <- 125634
   set.seed(myseed)
-  init <- rnorm(1000000)
-  if (method=="linear1") {
+
+  if (method=="linear") {
     filename1 <- paste(pathout, '/history_linear.txt', sep='')
     cat('## del.cut:', del.cut, '\n', file=filename1, sep=' ')
     cat('## T:', T, '\n', file=filename1, sep=' ', append=TRUE)
     cat(colname, '\n', file=filename1, append=TRUE)
 
     n <- n.min
-    power.ind <- power.fun(n, del.cut, k, T, p.c, effect.size, rep, pathcode, codefile, pathout, hyper)
-    alpha.fw <- alpha.fun(n, del.cut, k, T, p.c, effect.size, rep, pathcode, codefile, pathout, hyper)
+    power.ind <- power.fun(n, del.cut, k, T, p.c, effect.size, rep, pathcode, codefile, pathout)
+    alpha.fw <- alpha.fun(n, del.cut, k, T, p.c, effect.size, rep, pathcode, codefile, pathout)
     cat(n, alpha.fw, power.ind, '\n', file=filename1, append=TRUE)
+
     if (min(power.ind) < lower) { 
       repeat {
         n.next <- n + nstep;
-        power.ind <- power.fun(n.next, del.cut, k, T, p.c, effect.size, rep, pathcode, codefile, pathout, hyper)
-        alpha.fw <- alpha.fun(n.next, del.cut, k, T, p.c, effect.size, rep, pathcode, codefile, pathout, hyper)
+        power.ind <- power.fun(n.next, del.cut, k, T, p.c, effect.size, rep, pathcode, codefile, pathout)
+        alpha.fw <- alpha.fun(n.next, del.cut, k, T, p.c, effect.size, rep, pathcode, codefile, pathout)
         cat(n.next, alpha.fw, power.ind, '\n', file=filename1, append=TRUE)
         
         if (n.next > n.max) {
@@ -54,7 +53,7 @@ function(del.cut, k, T, p.c, effect.size,
       if (max(power.ind) > upper | alpha.fw > alpha.target + tol.a) {
         bisect(n, n.next, filename1, del.cut, k, T, p.c, effect.size, 
                alpha.target, power.target, tol.b1, tol.b2, tol.a,
-               rep, pathcode, codefile, pathout, hyper) 
+               rep, pathcode, codefile, pathout) 
       }else {
         print.op(flag=1, n.next, del.cut, k, T, alpha.fw, power.ind)
       }
@@ -64,8 +63,8 @@ function(del.cut, k, T, p.c, effect.size,
               "The algorithm linearly decreases n from n.min to find the optimal sample size.", call.=FALSE)
       repeat {
         n.next <- n - nstep;
-        power.ind <- power.fun(n.next, del.cut, k, T, p.c, effect.size, rep, pathcode, codefile, pathout, hyper)
-        alpha.fw <- alpha.fun(n.next, del.cut, k, T, p.c, effect.size, rep, pathcode, codefile, pathout, hyper)
+        power.ind <- power.fun(n.next, del.cut, k, T, p.c, effect.size, rep, pathcode, codefile, pathout)
+        alpha.fw <- alpha.fun(n.next, del.cut, k, T, p.c, effect.size, rep, pathcode, codefile, pathout)
         cat(n.next, alpha.fw, power.ind, '\n', file=filename1, append=TRUE)
 
         if(max(power.ind) <= upper)
@@ -77,7 +76,7 @@ function(del.cut, k, T, p.c, effect.size,
       if (min(power.ind) < lower | alpha.fw > alpha.target + tol.a) {
         bisect(n.next, n, filename1, del.cut, k, T, p.c, effect.size, 
                alpha.target, power.target, tol.b1, tol.b2, tol.a,
-               rep, pathcode, codefile, pathout, hyper) 
+               rep, pathcode, codefile, pathout) 
       }else {
         print.op(flag=1, n.next, del.cut, k, T, alpha.fw, power.ind)
       }
@@ -92,7 +91,7 @@ function(del.cut, k, T, p.c, effect.size,
     }
   }
 
-  if (method=="bisect1") {
+  if (method=="bisect") {
     filename2 <- paste(pathout, '/history_bisect.txt', sep='')
     cat('## del.cut:', del.cut, '\n', file=filename2, sep=' ')
     cat('## T:', T, '\n', file=filename2, sep=' ', append=TRUE)
@@ -100,10 +99,10 @@ function(del.cut, k, T, p.c, effect.size,
 
     na <- n.min
     nb <- n.max
-    power.a <- power.fun(na, del.cut, k, T, p.c, effect.size, rep, pathcode, codefile, pathout, hyper) 
-    alpha.a <- alpha.fun(na, del.cut, k, T, p.c, effect.size, rep, pathcode, codefile, pathout, hyper)
-    power.b <- power.fun(nb, del.cut, k, T, p.c, effect.size, rep, pathcode, codefile, pathout, hyper)
-    alpha.b <- alpha.fun(nb, del.cut, k, T, p.c, effect.size, rep, pathcode, codefile, pathout, hyper)
+    power.a <- power.fun(na, del.cut, k, T, p.c, effect.size, rep, pathcode, codefile, pathout) 
+    alpha.a <- alpha.fun(na, del.cut, k, T, p.c, effect.size, rep, pathcode, codefile, pathout)
+    power.b <- power.fun(nb, del.cut, k, T, p.c, effect.size, rep, pathcode, codefile, pathout)
+    alpha.b <- alpha.fun(nb, del.cut, k, T, p.c, effect.size, rep, pathcode, codefile, pathout)
     cat(na, alpha.a, power.a, '\n', file=filename2, append=TRUE)
     cat(nb, alpha.b, power.b, '\n', file=filename2, append=TRUE)
 
@@ -121,7 +120,7 @@ function(del.cut, k, T, p.c, effect.size,
         (max(power.b) > upper | alpha.b > alpha.target + tol.a)) {
       bisect(na, nb, filename2, del.cut, k, T, p.c, effect.size, 
                alpha.target, power.target, tol.b1, tol.b2, tol.a,
-               rep, pathcode, codefile, pathout, hyper) 
+               rep, pathcode, codefile, pathout) 
     }else if (min(power.a) >= lower & alpha.a <= alpha.target + tol.a) {
       print.op(flag=1, na, del.cut, k, T, alpha.a, power.a)
       message("Sample Size = n.min!")
@@ -130,7 +129,7 @@ function(del.cut, k, T, p.c, effect.size,
       message("Sample Size = n.max!")
     } 
   }
-  message(paste("Sample Size = 35"))
+
   time.end <- Sys.time()
   print(time.end - time.start);
   print(paste(method, "method was used."));
